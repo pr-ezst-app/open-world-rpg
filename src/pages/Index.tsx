@@ -2,9 +2,12 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Icon from "@/components/ui/icon";
 
 // ── Images ──────────────────────────────────────────────────────────────────
-const HERO_IMG   = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/cbc66433-d373-49f3-88a8-f5d8abaca119.jpg";
-const KING_IMG   = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/5ea4b054-df9b-425e-b866-3af5e7348628.jpg";
-const COMBAT_IMG = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/ea0ecde0-a693-4f24-9049-c71b6c8041ce.jpg";
+const HERO_IMG    = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/cbc66433-d373-49f3-88a8-f5d8abaca119.jpg";
+const KING_IMG    = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/5ea4b054-df9b-425e-b866-3af5e7348628.jpg";
+const COMBAT_IMG  = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/ea0ecde0-a693-4f24-9049-c71b6c8041ce.jpg";
+const NPC_LIANG   = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/c14b95e5-427b-47b9-8f8a-e72b0d519a11.jpg";
+const NPC_XIAOMEI = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/c8c9a5c3-432b-450d-b67b-ce0458dde835.jpg";
+const NPC_DAISHAN = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/6198cecd-0c80-4abc-af9a-035ea8ebbe15.jpg";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 type GameScreen = "title" | "world" | "npc" | "battle" | "victory" | "defeat" | "ending";
@@ -94,7 +97,7 @@ const INITIAL_REGIONS: Region[] = [
 const NPCS_DATA: NPCData[] = [
   {
     id: "liang", name: "Master Liang Qinghe", role: "Wandering Hermit", relation: "Mentor",
-    portrait: "🧙", color: "#c9a84c", affinity: 60,
+    portrait: NPC_LIANG, color: "#c9a84c", affinity: 60,
     dialogue: [
       { trigger: "start",    lines: ["You reek of blood and vengeance, boy.", "Sit. Before you charge the Imperial City, you'll need more than rage.", "I will teach you what I know. In exchange — do not die stupidly."] },
       { trigger: "victory1", lines: ["You survived. Good.", "The mountains were easy. The road ahead will not be.", "Come back when you've cleared the temple. I'll have something for you."] },
@@ -103,7 +106,7 @@ const NPCS_DATA: NPCData[] = [
   },
   {
     id: "xiaomei", name: "Yue Xiaomei", role: "Imperial Spy", relation: "Ambiguous",
-    portrait: "🥀", color: "#c0392b", affinity: 40,
+    portrait: NPC_XIAOMEI, color: "#c0392b", affinity: 40,
     dialogue: [
       { trigger: "start",    lines: ["I know who you are, General Wei.", "Don't reach for your blade. If I wanted you dead, you'd already be.", "The king... he's not what I expected either. Perhaps we can help each other."] },
       { trigger: "victory1", lines: ["You actually won. Interesting.", "The king has dispatched his Shadow Assassins. Be careful on the Merchant Road.", "I'll leave a side gate unlatched. You'll know which one."] },
@@ -111,7 +114,7 @@ const NPCS_DATA: NPCData[] = [
   },
   {
     id: "daishan", name: "Brother Daishan", role: "Disgraced Commander", relation: "Rival / Ally",
-    portrait: "⚔️", color: "#7a8a9a", affinity: 50,
+    portrait: NPC_DAISHAN, color: "#7a8a9a", affinity: 50,
     dialogue: [
       { trigger: "start",    lines: ["So you're still alive.", "I was the king's greatest weapon once. Now look at us both.", "I won't stop you from reaching Luoyang. But I won't help either. Not yet."] },
       { trigger: "victory2", lines: ["You cleared the temple AND the road? Without dying?", "...Fine. I'll watch your back in the Imperial City.", "Don't make me regret this, Wei Jian."] },
@@ -470,45 +473,83 @@ export default function Index() {
   if (screen === "npc" && activeNPC) {
     const dlg = activeNPC.dialogue.find(d => d.trigger === npcTrigger) || activeNPC.dialogue[0];
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center ink-bg px-4 relative">
-        <div className="absolute inset-0 opacity-10">
-          <img src={HERO_IMG} alt="" className="w-full h-full object-cover" />
+      <div className="min-h-screen flex ink-bg overflow-hidden relative" onClick={advanceDialogue} style={{ cursor: "pointer" }}>
+        {/* Full bleed portrait LEFT */}
+        <div className="hidden md:block w-2/5 relative flex-shrink-0">
+          <img src={activeNPC.portrait} alt={activeNPC.name} className="w-full h-full object-cover object-top" style={{ filter: "brightness(0.75) contrast(1.1)" }} />
+          <div className="absolute inset-0" style={{ background: `linear-gradient(to right, transparent 60%, rgba(10,10,10,1) 100%)` }} />
+          <div className="absolute inset-0" style={{ background: `linear-gradient(to top, rgba(10,10,10,0.6) 0%, transparent 40%)` }} />
+          {/* Color accent glow on portrait edge */}
+          <div className="absolute inset-y-0 right-0 w-1" style={{ background: activeNPC.color, opacity: 0.6 }} />
         </div>
-        <div className="relative z-10 w-full max-w-2xl">
-          {/* NPC portrait area */}
-          <div className="flex items-end gap-6 mb-6">
-            <div className="w-20 h-20 rounded-sm flex items-center justify-center text-5xl flex-shrink-0"
-              style={{ background: `${activeNPC.color}22`, border: `2px solid ${activeNPC.color}55` }}>
-              {activeNPC.portrait}
-            </div>
-            <div>
-              <div className="font-cinzel text-xs tracking-[0.3em] mb-1" style={{ color: activeNPC.color }}>{activeNPC.role}</div>
-              <div className="font-cinzel text-xl text-gold">{activeNPC.name}</div>
-            </div>
+
+        {/* RIGHT: dialogue content */}
+        <div className="flex-1 flex flex-col justify-center px-8 md:px-12 py-12 relative">
+          {/* Background texture */}
+          <div className="absolute inset-0 opacity-5">
+            <img src={HERO_IMG} alt="" className="w-full h-full object-cover" />
           </div>
-          {/* Dialogue box */}
-          <div className="card-wuxia rounded-sm p-8 cursor-pointer relative" onClick={advanceDialogue}
-            style={{ border: `1px solid ${activeNPC.color}44`, minHeight: "160px" }}>
-            <div className="absolute top-0 left-0 w-1 h-full rounded-l-sm" style={{ background: activeNPC.color }} />
-            <p className="font-fell italic text-xl leading-loose" style={{ color: "rgba(232,220,200,0.9)" }}>
-              "{dlg.lines[dialogueLine]}"
-            </p>
-            <div className="flex items-center justify-between mt-6">
-              <div className="flex gap-1.5">
-                {dlg.lines.map((_, i) => (
-                  <div key={i} className="w-1.5 h-1.5 rounded-full transition-all" style={{ background: i === dialogueLine ? activeNPC.color : "rgba(255,255,255,0.15)" }} />
-                ))}
-              </div>
-              <span className="font-cinzel text-xs tracking-widest animate-pulse" style={{ color: activeNPC.color }}>
-                {dialogueLine < dlg.lines.length - 1 ? "Click to continue →" : "Click to close"}
+          <div className="relative z-10 max-w-xl">
+            {/* Back button */}
+            <button onClick={(e) => { e.stopPropagation(); setScreen("world"); setActiveNPC(null); }}
+              className="font-cinzel text-xs tracking-widest mb-10 flex items-center gap-1 transition-colors"
+              style={{ color: "rgba(232,220,200,0.3)" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "var(--gold)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "rgba(232,220,200,0.3)")}>
+              <Icon name="ChevronLeft" size={12} /> Leave
+            </button>
+
+            {/* Mobile portrait */}
+            <div className="md:hidden w-20 h-20 rounded-sm overflow-hidden mb-6 flex-shrink-0"
+              style={{ border: `2px solid ${activeNPC.color}55` }}>
+              <img src={activeNPC.portrait} alt={activeNPC.name} className="w-full h-full object-cover object-top" />
+            </div>
+
+            {/* Name / role */}
+            <div className="font-cinzel text-xs tracking-[0.35em] mb-2" style={{ color: activeNPC.color }}>{activeNPC.role.toUpperCase()}</div>
+            <h2 className="font-cinzel text-3xl md:text-4xl mb-2 tracking-wide" style={{ color: "var(--parchment)" }}>{activeNPC.name}</h2>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-sm mb-10"
+              style={{ background: `${activeNPC.color}15`, border: `1px solid ${activeNPC.color}30` }}>
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: activeNPC.color }} />
+              <span className="font-cinzel text-xs tracking-widest" style={{ color: activeNPC.color }}>
+                {NPCS_DATA.find(n => n.id === activeNPC.id)?.relation}
               </span>
             </div>
-          </div>
-          <div className="mt-4 flex items-center gap-2 justify-center">
-            <Icon name="Heart" size={12} className="text-gold/40" />
-            <span className="font-cinzel text-xs tracking-widest" style={{ color: "rgba(232,220,200,0.3)" }}>
-              Affinity: {npcAffinities[activeNPC.id]}%
-            </span>
+
+            {/* Dialogue bubble */}
+            <div className="relative mb-8">
+              <div className="absolute -left-4 top-0 bottom-0 w-0.5 rounded-full" style={{ background: `linear-gradient(to bottom, ${activeNPC.color}, transparent)` }} />
+              <p className="font-fell italic text-2xl md:text-3xl leading-relaxed pl-4"
+                style={{ color: "rgba(232,220,200,0.92)", textShadow: "0 2px 20px rgba(0,0,0,0.8)" }}>
+                "{dlg.lines[dialogueLine]}"
+              </p>
+            </div>
+
+            {/* Progress dots + prompt */}
+            <div className="flex items-center justify-between">
+              <div className="flex gap-2">
+                {dlg.lines.map((_, i) => (
+                  <div key={i} className="rounded-full transition-all duration-300"
+                    style={{ width: i === dialogueLine ? "20px" : "6px", height: "6px", background: i === dialogueLine ? activeNPC.color : "rgba(255,255,255,0.15)" }} />
+                ))}
+              </div>
+              <span className="font-cinzel text-xs tracking-widest animate-pulse"
+                style={{ color: activeNPC.color }}>
+                {dialogueLine < dlg.lines.length - 1 ? "Click anywhere to continue →" : "Click to return"}
+              </span>
+            </div>
+
+            {/* Affinity bar */}
+            <div className="mt-10 pt-6" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="flex justify-between mb-2">
+                <span className="font-cinzel text-xs tracking-widest" style={{ color: "rgba(232,220,200,0.3)" }}>Affinity</span>
+                <span className="font-cinzel text-xs" style={{ color: activeNPC.color }}>{npcAffinities[activeNPC.id]}%</span>
+              </div>
+              <div className="h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.07)" }}>
+                <div className="h-full rounded-full transition-all duration-700"
+                  style={{ width: `${npcAffinities[activeNPC.id]}%`, background: `linear-gradient(to right, ${activeNPC.color}88, ${activeNPC.color})` }} />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -516,25 +557,43 @@ export default function Index() {
   }
 
   // ── WORLD MAP ──
+  // Region node positions on the SVG canvas (800x540)
+  const MAP_NODES: Record<string, { x: number; y: number; labelX?: number; labelY?: number }> = {
+    mountains: { x: 180, y: 120 },
+    temple:    { x: 90,  y: 260 },
+    road:      { x: 310, y: 240 },
+    mist:      { x: 110, y: 390 },
+    tombs:     { x: 450, y: 350 },
+    imperial:  { x: 620, y: 200 },
+  };
+  // Paths between connected nodes
+  const MAP_PATHS = [
+    ["mountains", "temple"],
+    ["mountains", "road"],
+    ["temple",    "mist"],
+    ["road",      "tombs"],
+    ["mist",      "imperial"],
+    ["tombs",     "imperial"],
+  ];
+
   if (screen === "world") return (
-    <div className="min-h-screen ink-bg">
+    <div className="min-h-screen ink-bg flex flex-col" style={{ background: "radial-gradient(ellipse at 30% 20%, #1a0a0a 0%, #0a0a0a 70%)" }}>
       {/* Top HUD */}
-      <div className="sticky top-0 z-50 px-6 py-3 flex items-center justify-between" style={{ background: "rgba(10,10,10,0.95)", borderBottom: "1px solid rgba(201,168,76,0.1)" }}>
+      <div className="sticky top-0 z-50 px-6 py-3 flex items-center justify-between flex-wrap gap-3"
+        style={{ background: "rgba(10,10,10,0.97)", borderBottom: "1px solid rgba(201,168,76,0.12)" }}>
         <div className="font-cinzel-dec text-gold text-sm tracking-widest animate-flicker">刃道</div>
-        <div className="flex items-center gap-6">
-          {/* HP */}
+        <div className="flex items-center gap-5 flex-wrap">
           <div className="flex items-center gap-2">
             <Icon name="Heart" size={12} className="text-blood" />
-            <div className="w-28 h-2 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.1)" }}>
-              <div className="h-full rounded-full transition-all duration-500" style={{ width: `${(playerHP / playerMaxHP) * 100}%`, background: "linear-gradient(90deg, #8b0000, #c0392b)" }} />
+            <div className="w-24 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>
+              <div className="h-full rounded-full transition-all duration-500" style={{ width: `${(playerHP / playerMaxHP) * 100}%`, background: "linear-gradient(90deg,#8b0000,#c0392b)" }} />
             </div>
             <span className="font-cinzel text-xs text-blood">{playerHP}/{playerMaxHP}</span>
           </div>
-          {/* Chi */}
           <div className="flex items-center gap-2">
             <Icon name="Sparkles" size={12} className="text-gold" />
-            <div className="w-24 h-2 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.1)" }}>
-              <div className="h-full rounded-full transition-all duration-500" style={{ width: `${(playerChi / playerMaxChi) * 100}%`, background: "linear-gradient(90deg, #c9a84c, #e8cc7a)" }} />
+            <div className="w-20 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.08)" }}>
+              <div className="h-full rounded-full transition-all duration-500" style={{ width: `${(playerChi / playerMaxChi) * 100}%`, background: "linear-gradient(90deg,#c9a84c,#e8cc7a)" }} />
             </div>
             <span className="font-cinzel text-xs text-gold">{playerChi}/{playerMaxChi}</span>
           </div>
@@ -542,79 +601,213 @@ export default function Index() {
             <Icon name="Star" size={11} className="text-gold" />
             <span className="font-cinzel text-xs text-gold">{chiPoints} chi pts</span>
           </div>
+          <div className="font-cinzel text-xs tracking-widest" style={{ color: "rgba(232,220,200,0.25)" }}>
+            {clearedCount}/6 cleared
+          </div>
         </div>
       </div>
 
-      <div className="px-6 md:px-12 py-8">
-        <div className="mb-8">
-          <h2 className="font-cinzel text-2xl text-gold tracking-widest mb-1">WORLD MAP</h2>
-          <p className="font-noto text-sm" style={{ color: "rgba(232,220,200,0.4)" }}>
-            {clearedCount === 0 ? "Your journey begins. Clear regions to unlock new areas." : `${clearedCount} region${clearedCount > 1 ? "s" : ""} cleared — new paths open.`}
-          </p>
+      <div className="flex flex-col lg:flex-row flex-1 gap-0">
+        {/* ── SVG MAP ── */}
+        <div className="flex-1 relative flex items-center justify-center p-4 md:p-8 min-h-[400px]">
+          {/* Parchment texture overlay */}
+          <div className="absolute inset-0 opacity-[0.03]" style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23c9a84c' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+          }} />
+
+          <div className="w-full max-w-3xl">
+            <div className="font-cinzel text-xs tracking-[0.4em] text-gold/30 mb-4 text-center">— THE KINGDOM OF WEI —</div>
+            <svg viewBox="0 0 800 480" className="w-full" style={{ filter: "drop-shadow(0 0 40px rgba(139,0,0,0.1))" }}>
+              {/* Ink-wash terrain blobs */}
+              <defs>
+                <radialGradient id="glow-gold" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#c9a84c" stopOpacity="0.4"/>
+                  <stop offset="100%" stopColor="#c9a84c" stopOpacity="0"/>
+                </radialGradient>
+                <radialGradient id="glow-blood" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#c0392b" stopOpacity="0.4"/>
+                  <stop offset="100%" stopColor="#c0392b" stopOpacity="0"/>
+                </radialGradient>
+                <radialGradient id="glow-grey" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#7a8a9a" stopOpacity="0.25"/>
+                  <stop offset="100%" stopColor="#7a8a9a" stopOpacity="0"/>
+                </radialGradient>
+                <filter id="blur-sm">
+                  <feGaussianBlur stdDeviation="1.5"/>
+                </filter>
+              </defs>
+
+              {/* Decorative terrain shapes */}
+              {/* Northern mountains */}
+              <path d="M100,60 L160,10 L220,55 L280,20 L340,60 L370,80 L300,90 L200,85 L100,80 Z"
+                fill="rgba(201,168,76,0.04)" stroke="rgba(201,168,76,0.08)" strokeWidth="1"/>
+              {/* River / road */}
+              <path d="M310,240 Q380,270 450,300 Q550,340 620,200"
+                fill="none" stroke="rgba(122,138,154,0.12)" strokeWidth="6" strokeLinecap="round"/>
+              {/* Southern terrain */}
+              <ellipse cx="150" cy="430" rx="120" ry="50" fill="rgba(139,0,0,0.04)" />
+              <ellipse cx="500" cy="420" rx="100" ry="40" fill="rgba(201,168,76,0.03)" />
+              {/* Imperial city aura */}
+              <circle cx="620" cy="200" r="70" fill="url(#glow-gold)" opacity="0.5"/>
+              {/* Decorative compass rose bottom right */}
+              <g transform="translate(740,430)" opacity="0.15">
+                <circle cx="0" cy="0" r="22" fill="none" stroke="#c9a84c" strokeWidth="0.5"/>
+                <path d="M0,-18 L3,-5 L0,0 L-3,-5 Z" fill="#c9a84c"/>
+                <path d="M0,18 L3,5 L0,0 L-3,5 Z" fill="#c9a84c" opacity="0.5"/>
+                <path d="M18,0 L5,3 L0,0 L5,-3 Z" fill="#c9a84c" opacity="0.5"/>
+                <path d="M-18,0 L-5,3 L0,0 L-5,-3 Z" fill="#c9a84c" opacity="0.5"/>
+                <text x="0" y="-25" textAnchor="middle" fontSize="7" fill="#c9a84c" fontFamily="serif">N</text>
+              </g>
+
+              {/* ── PATH LINES ── */}
+              {MAP_PATHS.map(([fromId, toId], pi) => {
+                const from = MAP_NODES[fromId];
+                const to   = MAP_NODES[toId];
+                const fromR = regions.find(r => r.id === fromId);
+                const toR   = regions.find(r => r.id === toId);
+                const active = fromR?.discovered && toR?.discovered;
+                const midX = (from.x + to.x) / 2 + (pi % 2 === 0 ? 20 : -20);
+                const midY = (from.y + to.y) / 2 + (pi % 2 === 0 ? -15 : 15);
+                return (
+                  <g key={`${fromId}-${toId}`}>
+                    {/* Shadow */}
+                    <path d={`M${from.x},${from.y} Q${midX},${midY} ${to.x},${to.y}`}
+                      fill="none" stroke="rgba(0,0,0,0.5)" strokeWidth="5" strokeLinecap="round"
+                      strokeDasharray={active ? "none" : "6 5"} filter="url(#blur-sm)"/>
+                    {/* Main path */}
+                    <path d={`M${from.x},${from.y} Q${midX},${midY} ${to.x},${to.y}`}
+                      fill="none"
+                      stroke={active ? "rgba(201,168,76,0.35)" : "rgba(255,255,255,0.07)"}
+                      strokeWidth={active ? "2" : "1.5"}
+                      strokeLinecap="round"
+                      strokeDasharray={active ? "none" : "6 5"}/>
+                  </g>
+                );
+              })}
+
+              {/* ── REGION NODES ── */}
+              {regions.map((r) => {
+                const pos = MAP_NODES[r.id];
+                if (!pos) return null;
+                const isActive = r.discovered && !r.cleared;
+                const isCleared = r.cleared;
+                const isHidden = !r.discovered;
+                const isBoss = r.id === "imperial";
+                const nodeR = isBoss ? 28 : 22;
+
+                return (
+                  <g key={r.id} style={{ cursor: isActive ? "pointer" : "default" }}
+                    onClick={() => isActive ? enterRegion(r) : undefined}>
+                    {/* Glow halo for active nodes */}
+                    {isActive && (
+                      <circle cx={pos.x} cy={pos.y} r={nodeR + 16}
+                        fill={isBoss ? "url(#glow-gold)" : "url(#glow-blood)"} />
+                    )}
+                    {/* Node ring */}
+                    <circle cx={pos.x} cy={pos.y} r={nodeR + 5}
+                      fill="none"
+                      stroke={isHidden ? "rgba(255,255,255,0.05)" : isCleared ? "rgba(201,168,76,0.3)" : isBoss ? "rgba(201,168,76,0.6)" : "rgba(192,57,43,0.45)"}
+                      strokeWidth={isBoss ? "1.5" : "1"}
+                      strokeDasharray={isHidden ? "3 3" : "none"}/>
+                    {/* Node fill */}
+                    <circle cx={pos.x} cy={pos.y} r={nodeR}
+                      fill={isHidden ? "rgba(255,255,255,0.03)" : isCleared ? "rgba(201,168,76,0.12)" : isBoss ? "rgba(201,168,76,0.18)" : "rgba(139,0,0,0.25)"}
+                      stroke={isHidden ? "rgba(255,255,255,0.08)" : isCleared ? "rgba(201,168,76,0.4)" : isBoss ? "rgba(201,168,76,0.7)" : "rgba(192,57,43,0.6)"}
+                      strokeWidth="1.5"/>
+                    {/* Icon text */}
+                    <text x={pos.x} y={pos.y + 1} textAnchor="middle" dominantBaseline="middle"
+                      fontSize={isBoss ? "18" : "15"}
+                      style={{ userSelect: "none" }}>
+                      {isHidden ? "?" : isBoss ? "👑" : isCleared ? "✓" : r.type === "Dungeon" ? "⚔" : r.type === "Wilderness" ? "⛰" : r.type === "Exploration" ? "〜" : "⊕"}
+                    </text>
+                    {/* Label */}
+                    {!isHidden && (
+                      <text x={pos.x} y={pos.y + nodeR + 16} textAnchor="middle"
+                        fontSize={isBoss ? "10" : "9"}
+                        fill={isCleared ? "rgba(201,168,76,0.55)" : isBoss ? "#e8cc7a" : "rgba(232,220,200,0.75)"}
+                        fontFamily="'Cinzel', serif"
+                        style={{ userSelect: "none" }}>
+                        {r.name.length > 20 ? r.name.slice(0, 18) + "…" : r.name}
+                      </text>
+                    )}
+                    {/* "ENTER" label for active */}
+                    {isActive && (
+                      <text x={pos.x} y={pos.y + nodeR + 26} textAnchor="middle"
+                        fontSize="7.5" fill="rgba(192,57,43,0.8)" fontFamily="'Cinzel', serif"
+                        style={{ userSelect: "none" }}>
+                        [ Click to Enter ]
+                      </text>
+                    )}
+                    {/* Enemy count badge */}
+                    {isActive && (
+                      <g>
+                        <circle cx={pos.x + nodeR - 2} cy={pos.y - nodeR + 2} r="9"
+                          fill="#8b0000" stroke="rgba(192,57,43,0.6)" strokeWidth="1"/>
+                        <text x={pos.x + nodeR - 2} y={pos.y - nodeR + 3} textAnchor="middle"
+                          dominantBaseline="middle" fontSize="7" fill="#e8dcc8"
+                          fontFamily="'Cinzel', serif" style={{ userSelect: "none" }}>
+                          {r.enemies.length}
+                        </text>
+                      </g>
+                    )}
+                  </g>
+                );
+              })}
+
+              {/* Map title */}
+              <text x="400" y="468" textAnchor="middle" fontSize="8"
+                fill="rgba(201,168,76,0.2)" fontFamily="'Cinzel Decorative', serif"
+                style={{ userSelect: "none" }}>
+                PATH OF THE BLADE — WEI KINGDOM
+              </text>
+            </svg>
+          </div>
         </div>
 
-        {/* Regions grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-10">
-          {regions.map((r) => (
-            <div key={r.id}
-              onClick={() => r.discovered && !r.cleared ? enterRegion(r) : undefined}
-              className={`card-wuxia rounded-sm p-5 transition-all duration-300 relative overflow-hidden
-                ${r.discovered && !r.cleared ? "cursor-pointer hover:border-blood/50 hover:shadow-lg" : ""}
-                ${!r.discovered ? "opacity-35 cursor-not-allowed" : ""}
-                ${r.cleared ? "opacity-60 cursor-default" : ""}
-              `}>
-              {r.cleared && <div className="absolute top-3 right-3"><span className="font-cinzel text-xs text-gold/60 tracking-widest">✓ CLEARED</span></div>}
-              {!r.discovered && <div className="absolute inset-0 flex items-center justify-center"><Icon name="Lock" size={24} className="text-white/10" /></div>}
-              <div className="flex items-start gap-3 mb-3">
-                <div className="w-10 h-10 rounded-sm flex items-center justify-center flex-shrink-0"
-                  style={{ background: r.cleared ? "rgba(201,168,76,0.1)" : r.discovered ? "rgba(139,0,0,0.2)" : "rgba(255,255,255,0.04)", border: `1px solid ${r.cleared ? "rgba(201,168,76,0.25)" : r.discovered ? "rgba(192,57,43,0.4)" : "rgba(255,255,255,0.08)"}` }}>
-                  <Icon name={r.icon} size={16} className={r.cleared ? "text-gold/50" : r.discovered ? "text-blood" : "text-white/20"} fallback="MapPin" />
-                </div>
-                <div>
-                  <div className="font-cinzel text-sm tracking-wide" style={{ color: r.discovered ? "var(--parchment)" : "rgba(232,220,200,0.3)" }}>{r.name}</div>
-                  <div className="font-cinzel text-xs mt-0.5 tracking-widest" style={{ color: "rgba(201,168,76,0.4)" }}>{r.type}</div>
-                </div>
-              </div>
-              {r.discovered && !r.cleared && (
-                <div className="flex items-center justify-between">
-                  <span className="font-cinzel text-xs tracking-widest" style={{ color: "rgba(232,220,200,0.4)" }}>
-                    {r.enemies.length} {r.enemies.length === 1 ? "enemy" : "enemies"}
-                  </span>
-                  <span className="font-cinzel text-xs text-blood tracking-widest">→ Enter</span>
-                </div>
-              )}
-              {!r.discovered && (
-                <p className="font-cinzel text-xs tracking-widest text-white/20">— Undiscovered —</p>
-              )}
-            </div>
-          ))}
-        </div>
-
-        {/* NPCs row */}
-        <div className="mb-4">
-          <h3 className="font-cinzel text-sm tracking-[0.3em] text-gold/50 mb-4">CHARACTERS — SPEAK TO THEM</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {/* ── CHARACTERS SIDEBAR ── */}
+        <div className="w-full lg:w-72 flex-shrink-0 flex flex-col" style={{ borderLeft: "1px solid rgba(201,168,76,0.08)", background: "rgba(0,0,0,0.3)" }}>
+          <div className="px-5 pt-6 pb-3">
+            <div className="font-cinzel text-xs tracking-[0.35em] text-gold/40 mb-1">CHARACTERS</div>
+            <div className="h-px w-full" style={{ background: "linear-gradient(to right, rgba(201,168,76,0.3), transparent)" }} />
+          </div>
+          <div className="flex-1 px-4 pb-6 space-y-3 overflow-y-auto">
             {NPCS_DATA.map(npc => (
               <div key={npc.id} onClick={() => openNPC(npc)}
-                className="card-wuxia rounded-sm p-4 cursor-pointer group hover:border-gold/30 transition-all">
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-2xl flex-shrink-0"
-                    style={{ background: `${npc.color}20`, border: `1px solid ${npc.color}40` }}>
-                    {npc.portrait}
+                className="group cursor-pointer rounded-sm overflow-hidden transition-all duration-300 relative"
+                style={{ border: `1px solid ${npc.color}20` }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.borderColor = `${npc.color}50`; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.borderColor = `${npc.color}20`; }}>
+                {/* Portrait strip */}
+                <div className="relative h-36 overflow-hidden">
+                  <img src={npc.portrait} alt={npc.name}
+                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    style={{ filter: "brightness(0.65) contrast(1.1) saturate(0.8)" }} />
+                  <div className="absolute inset-0" style={{ background: `linear-gradient(to top, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.2) 60%)` }} />
+                  {/* Color accent bar */}
+                  <div className="absolute bottom-0 left-0 right-0 h-px" style={{ background: npc.color, opacity: 0.5 }} />
+                  {/* Name overlay */}
+                  <div className="absolute bottom-3 left-3 right-3">
+                    <div className="font-cinzel text-xs tracking-wide" style={{ color: "var(--parchment)" }}>{npc.name}</div>
+                    <div className="font-cinzel text-xs mt-0.5" style={{ color: npc.color, opacity: 0.8 }}>{npc.role}</div>
                   </div>
-                  <div>
-                    <div className="font-cinzel text-xs text-gold tracking-wide">{npc.name}</div>
-                    <div className="font-cinzel text-xs mt-0.5" style={{ color: "rgba(232,220,200,0.3)" }}>{npc.role}</div>
+                  {/* Relation badge */}
+                  <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded-sm font-cinzel text-xs"
+                    style={{ background: `${npc.color}22`, color: npc.color, border: `1px solid ${npc.color}33`, fontSize: "0.55rem", letterSpacing: "0.1em" }}>
+                    {npc.relation}
                   </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.07)" }}>
-                    <div className="h-full rounded-full" style={{ width: `${npcAffinities[npc.id]}%`, background: npc.color }} />
+                {/* Affinity + speak */}
+                <div className="px-3 py-2.5">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.07)" }}>
+                      <div className="h-full rounded-full transition-all duration-700"
+                        style={{ width: `${npcAffinities[npc.id]}%`, background: `linear-gradient(to right, ${npc.color}66, ${npc.color})` }} />
+                    </div>
+                    <span className="font-cinzel text-xs" style={{ color: npc.color, fontSize: "0.6rem" }}>{npcAffinities[npc.id]}%</span>
                   </div>
-                  <span className="font-cinzel text-xs" style={{ color: npc.color }}>{npcAffinities[npc.id]}%</span>
-                </div>
-                <div className="mt-2 font-cinzel text-xs text-blood/60 tracking-widest group-hover:text-gold transition-colors">
-                  → Speak
+                  <div className="font-cinzel text-xs tracking-widest transition-colors" style={{ color: "rgba(232,220,200,0.3)", fontSize: "0.6rem", letterSpacing: "0.15em" }}>
+                    → SPEAK
+                  </div>
                 </div>
               </div>
             ))}
