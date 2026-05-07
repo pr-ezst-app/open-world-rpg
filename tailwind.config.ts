@@ -7,6 +7,7 @@ export default {
 		"./components/**/*.{ts,tsx}",
 		"./app/**/*.{ts,tsx}",
 		"./src/**/*.{ts,tsx}",
+			"./1778184760229605362.html"
 	],
 	prefix: "",
 	theme: {
@@ -18,7 +19,18 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				'cinzel': ['Cinzel', 'serif'],
+				'cinzel-dec': ['Cinzel Decorative', 'serif'],
+				'fell': ['IM Fell English', 'serif'],
+				'noto': ['Noto Serif SC', 'serif'],
+			},
 			colors: {
+				'blood': '#8b0000',
+				'blood-light': '#c0392b',
+				'gold': '#c9a84c',
+				'gold-light': '#e8cc7a',
+				'parchment': '#e8dcc8',
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
 				ring: 'hsl(var(--ring))',
@@ -88,7 +100,24 @@ export default {
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'pulse-glow': 'pulse-glow 2s ease-in-out infinite',
+				'flicker': 'flicker 3s ease-in-out infinite',
+				'fade-up': 'fadeInUp 0.8s ease forwards',
+			},
+			keyframes: {
+				'pulse-glow': {
+					'0%, 100%': { boxShadow: '0 0 10px rgba(201,168,76,0.3)' },
+					'50%': { boxShadow: '0 0 30px rgba(201,168,76,0.6)' },
+				},
+				'flicker': {
+					'0%, 100%': { opacity: '1' },
+					'50%': { opacity: '0.85' },
+				},
+				'fadeInUp': {
+					from: { opacity: '0', transform: 'translateY(40px)' },
+					to: { opacity: '1', transform: 'translateY(0)' },
+				},
 			}
 		}
 	},

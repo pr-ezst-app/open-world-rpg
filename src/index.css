@@ -4,98 +4,422 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 4%;
+    --foreground: 35 20% 88%;
+    --card: 0 0% 6%;
+    --card-foreground: 35 20% 88%;
+    --popover: 0 0% 6%;
+    --popover-foreground: 35 20% 88%;
+    --primary: 0 72% 42%;
+    --primary-foreground: 35 20% 95%;
+    --secondary: 30 15% 12%;
+    --secondary-foreground: 35 20% 88%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 35 10% 55%;
+    --accent: 43 74% 52%;
+    --accent-foreground: 0 0% 4%;
+    --destructive: 0 72% 42%;
+    --destructive-foreground: 35 20% 95%;
+    --border: 0 0% 14%;
+    --input: 0 0% 14%;
+    --ring: 0 72% 42%;
+    --radius: 0.25rem;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Game custom vars */
+    --blood: #8b0000;
+    --blood-light: #c0392b;
+    --gold: #c9a84c;
+    --gold-light: #e8cc7a;
+    --ink: #0a0a0a;
+    --parchment: #e8dcc8;
+    --steel: #7a8a9a;
   }
 
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-}
-
-@layer base {
   * {
     @apply border-border;
+    box-sizing: border-box;
   }
 
   body {
     @apply bg-background text-foreground;
+    font-family: "Noto Serif SC", serif;
+    background-color: var(--ink);
+    color: var(--parchment);
+    overflow-x: hidden;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+  }
+  ::-webkit-scrollbar-track {
+    background: #0a0a0a;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--blood);
+    border-radius: 2px;
+  }
+}
+
+@layer utilities {
+  .font-cinzel {
+    font-family: "Cinzel", serif;
+  }
+  .font-cinzel-dec {
+    font-family: "Cinzel Decorative", serif;
+  }
+  .font-fell {
+    font-family: "IM Fell English", serif;
+  }
+  .font-noto {
+    font-family: "Noto Serif SC", serif;
+  }
+
+  .text-gold {
+    color: var(--gold);
+  }
+  .text-gold-light {
+    color: var(--gold-light);
+  }
+  .text-blood {
+    color: var(--blood-light);
+  }
+  .bg-blood {
+    background-color: var(--blood);
+  }
+  .border-gold {
+    border-color: var(--gold);
+  }
+  .border-blood {
+    border-color: var(--blood);
+  }
+
+  .ink-bg {
+    background: radial-gradient(ellipse at 50% 0%, #1a0505 0%, #0a0a0a 60%);
+  }
+
+  .hero-glow {
+    box-shadow:
+      0 0 120px rgba(139, 0, 0, 0.3),
+      0 0 40px rgba(139, 0, 0, 0.15);
+  }
+
+  .gold-glow {
+    text-shadow:
+      0 0 30px rgba(201, 168, 76, 0.6),
+      0 0 60px rgba(201, 168, 76, 0.2);
+  }
+
+  .blood-glow {
+    text-shadow:
+      0 0 20px rgba(192, 57, 43, 0.8),
+      0 0 40px rgba(139, 0, 0, 0.4);
+  }
+
+  .card-wuxia {
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.03) 0%,
+      rgba(255, 255, 255, 0.01) 100%
+    );
+    border: 1px solid rgba(201, 168, 76, 0.15);
+    backdrop-filter: blur(4px);
+  }
+
+  .card-wuxia:hover {
+    border-color: rgba(201, 168, 76, 0.4);
+    background: linear-gradient(
+      135deg,
+      rgba(139, 0, 0, 0.08) 0%,
+      rgba(255, 255, 255, 0.02) 100%
+    );
+  }
+
+  .skill-node {
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .skill-node:hover .skill-inner {
+    border-color: var(--gold);
+    box-shadow: 0 0 20px rgba(201, 168, 76, 0.4);
+    transform: scale(1.05);
+  }
+  .skill-node.unlocked .skill-inner {
+    border-color: var(--gold);
+    background: linear-gradient(
+      135deg,
+      rgba(201, 168, 76, 0.2),
+      rgba(201, 168, 76, 0.05)
+    );
+  }
+  .skill-node.active .skill-inner {
+    border-color: var(--blood-light);
+    background: linear-gradient(
+      135deg,
+      rgba(192, 57, 43, 0.3),
+      rgba(139, 0, 0, 0.1)
+    );
+    box-shadow: 0 0 25px rgba(192, 57, 43, 0.5);
+  }
+  .skill-inner {
+    transition: all 0.3s ease;
+  }
+
+  .nav-link {
+    position: relative;
+    font-family: "Cinzel", serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(232, 220, 200, 0.6);
+    transition: color 0.3s;
+    cursor: pointer;
+    padding: 0.5rem 0;
+  }
+  .nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--gold);
+    transition: width 0.3s ease;
+  }
+  .nav-link:hover {
+    color: var(--gold-light);
+  }
+  .nav-link:hover::after {
+    width: 100%;
+  }
+  .nav-link.active {
+    color: var(--gold);
+  }
+  .nav-link.active::after {
+    width: 100%;
+  }
+
+  .btn-wuxia {
+    font-family: "Cinzel", serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink);
+    background: linear-gradient(
+      135deg,
+      var(--gold) 0%,
+      var(--gold-light) 50%,
+      var(--gold) 100%
+    );
+    border: none;
+    padding: 0.75rem 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-wuxia:hover {
+    box-shadow: 0 0 30px rgba(201, 168, 76, 0.5);
+    transform: translateY(-1px);
+  }
+
+  .btn-blood {
+    font-family: "Cinzel", serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--parchment);
+    background: linear-gradient(
+      135deg,
+      var(--blood) 0%,
+      var(--blood-light) 50%,
+      var(--blood) 100%
+    );
+    border: none;
+    padding: 0.75rem 2rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-blood:hover {
+    box-shadow: 0 0 30px rgba(192, 57, 43, 0.5);
+    transform: translateY(-1px);
+  }
+
+  .divider-ornate {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0.4;
+  }
+  .divider-ornate::before,
+  .divider-ornate::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold));
+  }
+  .divider-ornate::after {
+    background: linear-gradient(to left, transparent, var(--gold));
+  }
+
+  .chi-bar {
+    background: linear-gradient(
+      90deg,
+      var(--blood) 0%,
+      var(--blood-light) 60%,
+      rgba(232, 204, 122, 0.5) 100%
+    );
+    box-shadow: 0 0 8px rgba(192, 57, 43, 0.4);
+  }
+
+  .particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: var(--gold);
+    border-radius: 50%;
+    animation: float-particle linear infinite;
+    opacity: 0;
+  }
+
+  @keyframes float-particle {
+    0% {
+      transform: translateY(0) translateX(0);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.6;
+    }
+    90% {
+      opacity: 0.2;
+    }
+    100% {
+      transform: translateY(-200px) translateX(var(--drift, 20px));
+      opacity: 0;
+    }
+  }
+
+  @keyframes flicker {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.85;
+    }
+  }
+
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-40px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+
+  @keyframes slideReveal {
+    from {
+      clip-path: inset(0 100% 0 0);
+      opacity: 0;
+    }
+    to {
+      clip-path: inset(0 0% 0 0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      box-shadow: 0 0 10px rgba(201, 168, 76, 0.3);
+    }
+    50% {
+      box-shadow:
+        0 0 30px rgba(201, 168, 76, 0.6),
+        0 0 60px rgba(201, 168, 76, 0.2);
+    }
+  }
+
+  @keyframes sword-swing {
+    0% {
+      transform: rotate(-15deg) scale(0.95);
+    }
+    50% {
+      transform: rotate(5deg) scale(1.02);
+    }
+    100% {
+      transform: rotate(-15deg) scale(0.95);
+    }
+  }
+
+  .animate-fade-up {
+    animation: fadeInUp 0.8s ease forwards;
+  }
+  .animate-fade-left {
+    animation: fadeInLeft 0.8s ease forwards;
+  }
+  .animate-slide-reveal {
+    animation: slideReveal 1s ease forwards;
+  }
+  .animate-pulse-glow {
+    animation: pulse-glow 2s ease-in-out infinite;
+  }
+  .animate-sword {
+    animation: sword-swing 4s ease-in-out infinite;
+  }
+  .animate-flicker {
+    animation: flicker 3s ease-in-out infinite;
+  }
+
+  .delay-100 {
+    animation-delay: 0.1s;
+  }
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
+  .delay-400 {
+    animation-delay: 0.4s;
+  }
+  .delay-500 {
+    animation-delay: 0.5s;
+  }
+  .delay-700 {
+    animation-delay: 0.7s;
+  }
+  .delay-900 {
+    animation-delay: 0.9s;
+  }
+
+  .opacity-0-init {
+    opacity: 0;
+  }
+
+  .tab-active {
+    color: var(--gold);
+    border-bottom: 2px solid var(--gold);
+  }
+  .tab-inactive {
+    color: rgba(232, 220, 200, 0.4);
+    border-bottom: 2px solid transparent;
+  }
+  .tab-inactive:hover {
+    color: rgba(232, 220, 200, 0.7);
+    border-bottom-color: rgba(201, 168, 76, 0.3);
   }
 }
