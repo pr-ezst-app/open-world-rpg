@@ -5,12 +5,17 @@ import Icon from "@/components/ui/icon";
 const HERO_IMG    = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/cbc66433-d373-49f3-88a8-f5d8abaca119.jpg";
 const KING_IMG    = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/5ea4b054-df9b-425e-b866-3af5e7348628.jpg";
 const COMBAT_IMG  = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/ea0ecde0-a693-4f24-9049-c71b6c8041ce.jpg";
-const NPC_LIANG   = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/c14b95e5-427b-47b9-8f8a-e72b0d519a11.jpg";
-const NPC_XIAOMEI = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/c8c9a5c3-432b-450d-b67b-ce0458dde835.jpg";
-const NPC_DAISHAN = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/6198cecd-0c80-4abc-af9a-035ea8ebbe15.jpg";
+const NPC_LIANG    = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/c14b95e5-427b-47b9-8f8a-e72b0d519a11.jpg";
+const NPC_XIAOMEI  = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/c8c9a5c3-432b-450d-b67b-ce0458dde835.jpg";
+const NPC_DAISHAN  = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/6198cecd-0c80-4abc-af9a-035ea8ebbe15.jpg";
+const ENM_BANDIT   = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/71f17d9b-58d4-4cfc-9851-0041aaeb9880.jpg";
+const ENM_GUARD    = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/be7ff5ff-3ba2-4374-8786-adafc3db4b7e.jpg";
+const ENM_GENERAL  = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/99c9fe05-8bc9-4033-88f9-7a3e0623bdac.jpg";
+const ENM_SPY      = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/dcac210e-dcb9-4571-ba8a-d5ffbf0e8969.jpg";
+const ENM_KING     = "https://cdn.ezst.app/projects/b1ea146d-e53a-49bf-ae0c-a4c1c62e9f48/files/f875f069-ae80-4e25-a32d-52c567e708e6.jpg";
 
 // ── Types ────────────────────────────────────────────────────────────────────
-type GameScreen = "title" | "world" | "npc" | "battle" | "victory" | "defeat" | "ending";
+type GameScreen = "title" | "world" | "characters" | "npc" | "battle" | "victory" | "defeat" | "ending";
 type BattlePhase = "player" | "enemy" | "animating";
 
 interface Skill {
@@ -49,11 +54,11 @@ const PLAYER_SKILLS: Skill[] = [
 ];
 
 const ENEMIES_DB: Record<string, Enemy> = {
-  bandit:   { id: "bandit",   name: "Road Bandit",       title: "Hired Blade",      hp: 55,  maxHp: 55,  chi: 0,  maxChi: 0,   attack: 12, defense: 3,  portrait: "⚔️", reward: "Wind Step mastered" },
-  guard1:   { id: "guard1",   name: "Palace Guard",      title: "Imperial Soldier", hp: 80,  maxHp: 80,  chi: 20, maxChi: 40,  attack: 18, defense: 6,  portrait: "🛡️", reward: "Void Palm unlocked" },
-  general:  { id: "general",  name: "Commander Zhao",    title: "The Iron Fist",    hp: 120, maxHp: 120, chi: 40, maxChi: 80,  attack: 22, defense: 10, portrait: "🗡️", reward: "Rising Dragon unlocked" },
-  spy:      { id: "spy",      name: "Shadow Assassin",   title: "King's Shadow",    hp: 90,  maxHp: 90,  chi: 50, maxChi: 80,  attack: 28, defense: 4,  portrait: "🥷", reward: "Thousand Cuts unlocked" },
-  king:     { id: "king",     name: "King Weilong",      title: "The Betrayer",     hp: 200, maxHp: 200, chi: 80, maxChi: 120, attack: 32, defense: 15, portrait: "👑", reward: "VICTORY", isBoss: true },
+  bandit:   { id: "bandit",   name: "Road Bandit",       title: "Hired Blade",      hp: 55,  maxHp: 55,  chi: 0,  maxChi: 0,   attack: 12, defense: 3,  portrait: ENM_BANDIT,  reward: "Wind Step mastered" },
+  guard1:   { id: "guard1",   name: "Palace Guard",      title: "Imperial Soldier", hp: 80,  maxHp: 80,  chi: 20, maxChi: 40,  attack: 18, defense: 6,  portrait: ENM_GUARD,   reward: "Void Palm unlocked" },
+  general:  { id: "general",  name: "Commander Zhao",    title: "The Iron Fist",    hp: 120, maxHp: 120, chi: 40, maxChi: 80,  attack: 22, defense: 10, portrait: ENM_GENERAL, reward: "Rising Dragon unlocked" },
+  spy:      { id: "spy",      name: "Shadow Assassin",   title: "King's Shadow",    hp: 90,  maxHp: 90,  chi: 50, maxChi: 80,  attack: 28, defense: 4,  portrait: ENM_SPY,     reward: "Thousand Cuts unlocked" },
+  king:     { id: "king",     name: "King Weilong",      title: "The Betrayer",     hp: 200, maxHp: 200, chi: 80, maxChi: 120, attack: 32, defense: 15, portrait: ENM_KING,    reward: "VICTORY", isBoss: true },
 };
 
 const INITIAL_REGIONS: Region[] = [
@@ -122,6 +127,108 @@ const NPCS_DATA: NPCData[] = [
   },
 ];
 
+// ── Characters World Data ────────────────────────────────────────────────────
+interface CharacterEntry {
+  id: string; name: string; title: string; role: string;
+  faction: string; factionColor: string;
+  portrait: string; bgColor: string; accentColor: string;
+  weapon: string; specialty: string;
+  lore: string; quote: string;
+  stats?: { atk?: number; def?: number; hp?: number; chi?: number };
+  isEnemy?: boolean; isBoss?: boolean; isPlayer?: boolean;
+  npcId?: string;
+}
+
+const ALL_CHARACTERS: CharacterEntry[] = [
+  {
+    id: "weijian", name: "Wei Jian", title: "The Fallen General",
+    role: "Protagonist", faction: "Exiled", factionColor: "#c9a84c",
+    portrait: HERO_IMG, bgColor: "#1a0a0a", accentColor: "#c9a84c",
+    weapon: "Dao Sword", specialty: "Adaptive Combat",
+    lore: "Once the empire's greatest general, Wei Jian was stripped of rank and cast out after refusing to massacre a village on the king's orders. He returns now — not for glory, but for justice.",
+    quote: "I did not come back to reclaim a throne. I came back to burn one.",
+    stats: { hp: 100, chi: 100 },
+    isPlayer: true,
+  },
+  {
+    id: "liang", name: "Master Liang Qinghe", title: "The Wandering Hermit",
+    role: "Mentor", faction: "Unaligned", factionColor: "#c9a84c",
+    portrait: NPC_LIANG, bgColor: "#0f0d06", accentColor: "#c9a84c",
+    weapon: "Jade Staff", specialty: "Chi Cultivation",
+    lore: "Once the greatest swordsman the kingdom had ever seen, Liang Qinghe vanished after the previous king's death. He resurfaces now, drawn to Wei Jian's path — whether as a teacher or a test remains unclear.",
+    quote: "A blade that does not know when to rest is a blade that will shatter.",
+    npcId: "liang",
+  },
+  {
+    id: "xiaomei", name: "Yue Xiaomei", title: "The Imperial Spy",
+    role: "Ambiguous Ally", faction: "Imperial Court", factionColor: "#c0392b",
+    portrait: NPC_XIAOMEI, bgColor: "#130505", accentColor: "#c0392b",
+    weapon: "Hidden Daggers", specialty: "Infiltration & Poison",
+    lore: "Xiaomei serves the king — or did. After witnessing what he ordered done to the northern villages, something cracked. She walks both sides of the line now, feeding Wei Jian intelligence while still playing her role at court.",
+    quote: "I have been a spy so long I've forgotten what loyalty feels like. Perhaps that makes me useful.",
+    npcId: "xiaomei",
+  },
+  {
+    id: "daishan", name: "Brother Daishan", title: "The Disgraced Commander",
+    role: "Rival / Ally", faction: "Former Imperial", factionColor: "#7a8a9a",
+    portrait: NPC_DAISHAN, bgColor: "#080c10", accentColor: "#7a8a9a",
+    weapon: "War Glaive", specialty: "Heavy Armor Warfare",
+    lore: "Daishan was the king's iron fist — until he refused one order too many. Stripped of command but too dangerous to execute, he now wanders the borderlands. He owes Wei Jian nothing. He might help him anyway.",
+    quote: "I'm not your sword. But if you're headed where I think you're headed — I'll walk beside you.",
+    npcId: "daishan",
+  },
+  {
+    id: "bandit_e", name: "Road Bandit", title: "Hired Blade",
+    role: "Enemy", faction: "Brigands", factionColor: "#8b6914",
+    portrait: ENM_BANDIT, bgColor: "#0d0a02", accentColor: "#8b6914",
+    weapon: "Rusty Dao", specialty: "Ambush",
+    lore: "Desperate men driven from their villages by imperial tax collectors. They prey on travelers through the Dragon Spine pass — but loyalty goes to whoever pays most. Or bleeds least.",
+    quote: "Hand over your coin and walk away with your fingers.",
+    stats: { hp: 55, atk: 12, def: 3 },
+    isEnemy: true,
+  },
+  {
+    id: "guard_e", name: "Palace Guard", title: "Imperial Soldier",
+    role: "Enemy", faction: "Imperial Legion", factionColor: "#c0392b",
+    portrait: ENM_GUARD, bgColor: "#100305", accentColor: "#8b1a1a",
+    weapon: "Spear & Shield", specialty: "Formation Combat",
+    lore: "The empire's foot soldiers — drilled, disciplined, and loyal to a fault. Most were peasants a year ago. Now they stand between the king and his enemies, never questioning why.",
+    quote: "Stand down. This is your only warning.",
+    stats: { hp: 80, atk: 18, def: 6 },
+    isEnemy: true,
+  },
+  {
+    id: "general_e", name: "Commander Zhao", title: "The Iron Fist",
+    role: "Elite Enemy", faction: "Imperial Legion", factionColor: "#c0392b",
+    portrait: ENM_GENERAL, bgColor: "#0d0203", accentColor: "#a0281a",
+    weapon: "Iron War Hammer", specialty: "Crushing Blows",
+    lore: "Zhao rose through the ranks by breaking everything in his path — enemies, officers, and principles alike. He serves the king because cruelty has found a comfortable home there. He has no ideology. Only force.",
+    quote: "I don't hate you, Wei Jian. I'll just enjoy this.",
+    stats: { hp: 120, atk: 22, def: 10 },
+    isEnemy: true,
+  },
+  {
+    id: "spy_e", name: "Shadow Assassin", title: "King's Shadow",
+    role: "Elite Enemy", faction: "Shadow Bureau", factionColor: "#2d2d3a",
+    portrait: ENM_SPY, bgColor: "#05050d", accentColor: "#4a4a6a",
+    weapon: "Twin Short Blades", specialty: "Assassination & Poison",
+    lore: "The Shadow Bureau has no names, no faces, no records. They exist only in results — bodies found without wounds, generals who simply disappear. This one has been assigned Wei Jian personally.",
+    quote: "...",
+    stats: { hp: 90, atk: 28, def: 4 },
+    isEnemy: true,
+  },
+  {
+    id: "king_e", name: "King Weilong", title: "The Betrayer",
+    role: "Final Boss", faction: "Imperial Throne", factionColor: "#c9a84c",
+    portrait: ENM_KING, bgColor: "#0d0800", accentColor: "#c9a84c",
+    weapon: "Jade Scepter / Hidden Sword", specialty: "Chi Mastery & Treachery",
+    lore: "Weilong was not always a tyrant. Once he and Wei Jian fought side by side. Then power showed him what he truly was. He ordered the massacres. He signed the exile. He built his throne on betrayal — and he will defend it with everything he has.",
+    quote: "You were my greatest general, Wei Jian. Now you are simply an obstacle.",
+    stats: { hp: 200, atk: 32, def: 15, chi: 120 },
+    isEnemy: true, isBoss: true,
+  },
+];
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function clamp(val: number, min: number, max: number) { return Math.max(min, Math.min(max, val)); }
 
@@ -161,6 +268,10 @@ export default function Index() {
   const [npcTrigger, setNpcTrigger]         = useState("start");
   const [npcAffinities, setNpcAffinities]   = useState<Record<string, number>>({ liang: 60, xiaomei: 40, daishan: 50 });
   const [visitedNPCs, setVisitedNPCs]       = useState<Set<string>>(new Set());
+
+  // ── Characters gallery state ──
+  const [activeChar, setActiveChar]         = useState<CharacterEntry | null>(null);
+  const [charFilter, setCharFilter]         = useState<"all" | "ally" | "enemy">("all");
 
   const logRef = useRef<HTMLDivElement>(null);
 
@@ -444,6 +555,220 @@ export default function Index() {
     </div>
   );
 
+  // ── CHARACTERS SCREEN ──
+  if (screen === "characters") {
+    const filtered = ALL_CHARACTERS.filter(c => {
+      if (charFilter === "ally")  return !c.isEnemy;
+      if (charFilter === "enemy") return !!c.isEnemy;
+      return true;
+    });
+
+    return (
+      <div className="min-h-screen ink-bg flex flex-col" style={{ background: "radial-gradient(ellipse at 50% 0%, #120808 0%, #0a0a0a 60%)" }}>
+        {/* Header */}
+        <div className="sticky top-0 z-50 px-6 py-4 flex items-center justify-between"
+          style={{ background: "rgba(10,10,10,0.97)", borderBottom: "1px solid rgba(201,168,76,0.12)" }}>
+          <button onClick={() => { setActiveChar(null); setScreen("world"); }}
+            className="font-cinzel text-xs tracking-widest flex items-center gap-1 transition-colors"
+            style={{ color: "rgba(232,220,200,0.35)" }}
+            onMouseEnter={e => (e.currentTarget.style.color = "var(--gold)")}
+            onMouseLeave={e => (e.currentTarget.style.color = "rgba(232,220,200,0.35)")}>
+            <Icon name="ChevronLeft" size={12} /> World Map
+          </button>
+          <div className="font-cinzel-dec text-gold text-sm tracking-widest animate-flicker">CHARACTERS</div>
+          {/* Filter tabs */}
+          <div className="flex gap-1">
+            {(["all", "ally", "enemy"] as const).map(f => (
+              <button key={f} onClick={() => { setCharFilter(f); setActiveChar(null); }}
+                className="font-cinzel text-xs px-3 py-1 rounded-sm tracking-widest transition-all"
+                style={{
+                  background: charFilter === f ? "rgba(201,168,76,0.15)" : "transparent",
+                  color: charFilter === f ? "var(--gold)" : "rgba(232,220,200,0.3)",
+                  border: `1px solid ${charFilter === f ? "rgba(201,168,76,0.35)" : "transparent"}`,
+                }}>
+                {f.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-1 overflow-hidden">
+          {/* ── LEFT: character grid ── */}
+          <div className={`flex-shrink-0 overflow-y-auto p-4 transition-all duration-300 ${activeChar ? "w-full md:w-80" : "w-full"}`}>
+            <div className={`grid gap-3 ${activeChar ? "grid-cols-2 md:grid-cols-2" : "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"}`}>
+              {filtered.map(char => (
+                <div key={char.id}
+                  onClick={() => setActiveChar(activeChar?.id === char.id ? null : char)}
+                  className="relative overflow-hidden rounded-sm cursor-pointer group transition-all duration-300"
+                  style={{
+                    aspectRatio: "2/3",
+                    border: `1px solid ${activeChar?.id === char.id ? char.accentColor + "80" : "rgba(255,255,255,0.06)"}`,
+                    boxShadow: activeChar?.id === char.id ? `0 0 20px ${char.accentColor}30` : "none",
+                  }}>
+                  {/* Portrait */}
+                  <img src={char.portrait} alt={char.name}
+                    className="w-full h-full object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    style={{ filter: `brightness(${activeChar?.id === char.id ? "0.9" : "0.6"}) contrast(1.1) saturate(${char.isEnemy ? "0.7" : "0.85"})` }} />
+                  {/* Gradient overlay */}
+                  <div className="absolute inset-0" style={{ background: `linear-gradient(to top, ${char.bgColor}f0 0%, ${char.bgColor}80 40%, transparent 70%)` }} />
+                  {/* Role badge */}
+                  <div className="absolute top-2 left-2 px-1.5 py-0.5 rounded-sm font-cinzel"
+                    style={{ background: `${char.accentColor}25`, border: `1px solid ${char.accentColor}40`, color: char.accentColor, fontSize: "0.5rem", letterSpacing: "0.12em" }}>
+                    {char.isPlayer ? "PLAYER" : char.isBoss ? "BOSS" : char.isEnemy ? "ENEMY" : "ALLY"}
+                  </div>
+                  {/* Name */}
+                  <div className="absolute bottom-0 left-0 right-0 p-2.5">
+                    <div className="font-cinzel tracking-wide leading-tight" style={{ color: "var(--parchment)", fontSize: "0.65rem" }}>{char.name}</div>
+                    <div className="font-cinzel mt-0.5" style={{ color: char.accentColor, fontSize: "0.55rem", opacity: 0.85 }}>{char.title}</div>
+                  </div>
+                  {/* Active indicator */}
+                  {activeChar?.id === char.id && (
+                    <div className="absolute inset-y-0 right-0 w-0.5" style={{ background: char.accentColor }} />
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* ── RIGHT: character detail ── */}
+          {activeChar && (
+            <div className="hidden md:flex flex-1 flex-col overflow-y-auto relative" style={{ borderLeft: `1px solid ${activeChar.accentColor}20` }}>
+              {/* Large portrait bg */}
+              <div className="relative flex-shrink-0" style={{ height: "55vh" }}>
+                <img src={activeChar.portrait} alt={activeChar.name}
+                  className="w-full h-full object-cover object-top"
+                  style={{ filter: "brightness(0.55) contrast(1.15) saturate(0.7)" }} />
+                <div className="absolute inset-0" style={{ background: `linear-gradient(to top, rgba(10,10,10,1) 0%, rgba(10,10,10,0.3) 50%, transparent 80%)` }} />
+                <div className="absolute inset-0" style={{ background: `linear-gradient(to right, transparent 60%, rgba(10,10,10,0.7) 100%)` }} />
+                {/* Faction badge */}
+                <div className="absolute top-5 right-5 px-3 py-1.5 rounded-sm font-cinzel text-xs tracking-widest"
+                  style={{ background: `${activeChar.factionColor}18`, border: `1px solid ${activeChar.factionColor}40`, color: activeChar.factionColor }}>
+                  {activeChar.faction}
+                </div>
+                {/* Name overlay */}
+                <div className="absolute bottom-6 left-8">
+                  <div className="font-cinzel text-xs tracking-[0.35em] mb-2" style={{ color: activeChar.accentColor }}>{activeChar.role.toUpperCase()}</div>
+                  <h2 className="font-cinzel text-4xl tracking-wide mb-1" style={{ color: "var(--parchment)" }}>{activeChar.name}</h2>
+                  <div className="font-cinzel text-sm tracking-widest" style={{ color: "rgba(232,220,200,0.4)" }}>{activeChar.title}</div>
+                </div>
+              </div>
+
+              {/* Detail content */}
+              <div className="px-8 py-6 flex-1">
+                {/* Quote */}
+                <div className="mb-6 pl-4 relative">
+                  <div className="absolute left-0 top-0 bottom-0 w-0.5 rounded-full" style={{ background: activeChar.accentColor }} />
+                  <p className="font-fell italic text-xl leading-loose" style={{ color: "rgba(232,220,200,0.8)" }}>"{activeChar.quote}"</p>
+                </div>
+
+                {/* Stats row */}
+                {activeChar.stats && (
+                  <div className="grid grid-cols-4 gap-3 mb-6">
+                    {activeChar.stats.hp  !== undefined && (
+                      <div className="text-center p-3 rounded-sm" style={{ background: "rgba(139,0,0,0.15)", border: "1px solid rgba(139,0,0,0.2)" }}>
+                        <div className="font-cinzel text-xl text-blood">{activeChar.stats.hp}</div>
+                        <div className="font-cinzel text-xs text-blood/50 tracking-widest mt-0.5">HP</div>
+                      </div>
+                    )}
+                    {activeChar.stats.atk !== undefined && (
+                      <div className="text-center p-3 rounded-sm" style={{ background: "rgba(201,168,76,0.1)", border: "1px solid rgba(201,168,76,0.15)" }}>
+                        <div className="font-cinzel text-xl text-gold">{activeChar.stats.atk}</div>
+                        <div className="font-cinzel text-xs text-gold/50 tracking-widest mt-0.5">ATK</div>
+                      </div>
+                    )}
+                    {activeChar.stats.def !== undefined && (
+                      <div className="text-center p-3 rounded-sm" style={{ background: "rgba(122,138,154,0.12)", border: "1px solid rgba(122,138,154,0.15)" }}>
+                        <div className="font-cinzel text-xl" style={{ color: "#7a8a9a" }}>{activeChar.stats.def}</div>
+                        <div className="font-cinzel text-xs tracking-widest mt-0.5" style={{ color: "rgba(122,138,154,0.5)" }}>DEF</div>
+                      </div>
+                    )}
+                    {activeChar.stats.chi !== undefined && (
+                      <div className="text-center p-3 rounded-sm" style={{ background: "rgba(201,168,76,0.08)", border: "1px solid rgba(201,168,76,0.1)" }}>
+                        <div className="font-cinzel text-xl text-gold">{activeChar.stats.chi}</div>
+                        <div className="font-cinzel text-xs text-gold/40 tracking-widest mt-0.5">CHI</div>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Weapon & specialty */}
+                <div className="grid grid-cols-2 gap-3 mb-6">
+                  <div className="p-3 rounded-sm" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                    <div className="font-cinzel text-xs tracking-widest mb-1" style={{ color: "rgba(232,220,200,0.3)" }}>WEAPON</div>
+                    <div className="font-cinzel text-sm" style={{ color: "var(--parchment)" }}>{activeChar.weapon}</div>
+                  </div>
+                  <div className="p-3 rounded-sm" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                    <div className="font-cinzel text-xs tracking-widest mb-1" style={{ color: "rgba(232,220,200,0.3)" }}>SPECIALTY</div>
+                    <div className="font-cinzel text-sm" style={{ color: "var(--parchment)" }}>{activeChar.specialty}</div>
+                  </div>
+                </div>
+
+                {/* Lore */}
+                <div className="mb-6">
+                  <div className="font-cinzel text-xs tracking-[0.35em] mb-3" style={{ color: activeChar.accentColor, opacity: 0.7 }}>LORE</div>
+                  <p className="font-noto text-sm leading-loose" style={{ color: "rgba(232,220,200,0.55)" }}>{activeChar.lore}</p>
+                </div>
+
+                {/* Speak button for NPCs */}
+                {activeChar.npcId && (
+                  <button
+                    onClick={() => { const npc = NPCS_DATA.find(n => n.id === activeChar.npcId); if (npc) { setActiveChar(null); openNPC(npc); } }}
+                    className="btn-wuxia w-full text-center">
+                    Speak with {activeChar.name.split(" ")[0]}
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Mobile detail panel */}
+          {activeChar && (
+            <div className="md:hidden fixed inset-0 z-50 ink-bg overflow-y-auto" style={{ background: "rgba(10,10,10,0.98)" }}>
+              <div className="relative" style={{ height: "45vh" }}>
+                <img src={activeChar.portrait} alt={activeChar.name} className="w-full h-full object-cover object-top" style={{ filter: "brightness(0.55) saturate(0.7)" }} />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(to top, rgba(10,10,10,1) 0%, transparent 60%)" }} />
+                <button onClick={() => setActiveChar(null)}
+                  className="absolute top-4 right-4 font-cinzel text-xs tracking-widest px-3 py-1 rounded-sm"
+                  style={{ background: "rgba(0,0,0,0.7)", color: "rgba(232,220,200,0.7)", border: "1px solid rgba(255,255,255,0.1)" }}>
+                  ✕ Close
+                </button>
+                <div className="absolute bottom-5 left-5">
+                  <div className="font-cinzel text-xs mb-1" style={{ color: activeChar.accentColor }}>{activeChar.role}</div>
+                  <h2 className="font-cinzel text-2xl" style={{ color: "var(--parchment)" }}>{activeChar.name}</h2>
+                  <div className="font-cinzel text-xs mt-1" style={{ color: "rgba(232,220,200,0.4)" }}>{activeChar.title}</div>
+                </div>
+              </div>
+              <div className="p-5">
+                <p className="font-fell italic text-lg leading-loose mb-5 pl-3" style={{ color: "rgba(232,220,200,0.8)", borderLeft: `2px solid ${activeChar.accentColor}` }}>"{activeChar.quote}"</p>
+                {activeChar.stats && (
+                  <div className="flex gap-2 mb-5 flex-wrap">
+                    {Object.entries(activeChar.stats).map(([k, v]) => (
+                      <div key={k} className="px-3 py-2 rounded-sm text-center" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", minWidth: "56px" }}>
+                        <div className="font-cinzel text-lg text-gold">{v}</div>
+                        <div className="font-cinzel text-xs text-gold/40 tracking-widest">{k.toUpperCase()}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                <div className="mb-4">
+                  <div className="font-cinzel text-xs tracking-widest mb-2" style={{ color: "rgba(232,220,200,0.3)" }}>WEAPON · {activeChar.weapon}</div>
+                  <div className="font-cinzel text-xs tracking-widest mb-4" style={{ color: "rgba(232,220,200,0.3)" }}>SPECIALTY · {activeChar.specialty}</div>
+                  <p className="font-noto text-sm leading-loose" style={{ color: "rgba(232,220,200,0.5)" }}>{activeChar.lore}</p>
+                </div>
+                {activeChar.npcId && (
+                  <button onClick={() => { const npc = NPCS_DATA.find(n => n.id === activeChar.npcId); if (npc) { setActiveChar(null); openNPC(npc); } }}
+                    className="btn-wuxia w-full text-center mt-4">
+                    Speak with {activeChar.name.split(" ")[0]}
+                  </button>
+                )}
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   // ── ENDING SCREEN ──
   if (screen === "ending") return (
     <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden ink-bg">
@@ -604,6 +929,13 @@ export default function Index() {
           <div className="font-cinzel text-xs tracking-widest" style={{ color: "rgba(232,220,200,0.25)" }}>
             {clearedCount}/6 cleared
           </div>
+          <button onClick={() => { setActiveChar(null); setCharFilter("all"); setScreen("characters"); }}
+            className="font-cinzel text-xs px-3 py-1.5 rounded-sm tracking-widest transition-all"
+            style={{ background: "rgba(201,168,76,0.08)", border: "1px solid rgba(201,168,76,0.2)", color: "rgba(201,168,76,0.7)" }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.color = "var(--gold)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,76,0.5)"; }}
+            onMouseLeave={e => { (e.currentTarget as HTMLElement).style.color = "rgba(201,168,76,0.7)"; (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,168,76,0.2)"; }}>
+            Characters
+          </button>
         </div>
       </div>
 
@@ -766,9 +1098,18 @@ export default function Index() {
 
         {/* ── CHARACTERS SIDEBAR ── */}
         <div className="w-full lg:w-72 flex-shrink-0 flex flex-col" style={{ borderLeft: "1px solid rgba(201,168,76,0.08)", background: "rgba(0,0,0,0.3)" }}>
-          <div className="px-5 pt-6 pb-3">
-            <div className="font-cinzel text-xs tracking-[0.35em] text-gold/40 mb-1">CHARACTERS</div>
-            <div className="h-px w-full" style={{ background: "linear-gradient(to right, rgba(201,168,76,0.3), transparent)" }} />
+          <div className="px-5 pt-6 pb-3 flex items-center justify-between">
+            <div>
+              <div className="font-cinzel text-xs tracking-[0.35em] text-gold/40 mb-1">CHARACTERS</div>
+              <div className="h-px w-full" style={{ background: "linear-gradient(to right, rgba(201,168,76,0.3), transparent)" }} />
+            </div>
+            <button onClick={() => { setActiveChar(null); setCharFilter("all"); setScreen("characters"); }}
+              className="font-cinzel text-xs tracking-widest transition-colors flex items-center gap-1 flex-shrink-0 ml-3"
+              style={{ color: "rgba(201,168,76,0.4)" }}
+              onMouseEnter={e => (e.currentTarget.style.color = "var(--gold)")}
+              onMouseLeave={e => (e.currentTarget.style.color = "rgba(201,168,76,0.4)")}>
+              All →
+            </button>
           </div>
           <div className="flex-1 px-4 pb-6 space-y-3 overflow-y-auto">
             {NPCS_DATA.map(npc => (
@@ -837,9 +1178,18 @@ export default function Index() {
           {/* Enemy + Player stat bars */}
           <div className="grid grid-cols-2 gap-4 mb-6">
             {/* Enemy */}
-            <div className={`card-wuxia rounded-sm p-4 transition-all ${shakeEnemy ? "translate-x-2" : ""}`} style={{ transitionDuration: "0.1s" }}>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-2xl">{currentEnemy?.portrait}</span>
+            <div className={`card-wuxia rounded-sm p-4 transition-all overflow-hidden relative ${shakeEnemy ? "translate-x-2" : ""}`} style={{ transitionDuration: "0.1s" }}>
+              {/* Background portrait */}
+              {currentEnemy && (
+                <div className="absolute inset-0 pointer-events-none">
+                  <img src={currentEnemy.portrait} alt="" className="w-full h-full object-cover object-top opacity-10" style={{ filter: "saturate(0.3)" }} />
+                  <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(10,10,10,0.7), rgba(10,10,10,0.9))" }} />
+                </div>
+              )}
+              <div className="relative flex items-center gap-2 mb-2">
+                <div className="w-10 h-10 rounded-sm overflow-hidden flex-shrink-0" style={{ border: "1px solid rgba(192,57,43,0.4)" }}>
+                  {currentEnemy && <img src={currentEnemy.portrait} alt="" className="w-full h-full object-cover object-top" style={{ filter: "brightness(0.8) saturate(0.7)" }} />}
+                </div>
                 <div>
                   <div className="font-cinzel text-xs text-blood tracking-wide">{currentEnemy?.name}</div>
                   <div className="font-cinzel text-xs" style={{ color: "rgba(232,220,200,0.3)" }}>{currentEnemy?.title}</div>
@@ -860,9 +1210,15 @@ export default function Index() {
             </div>
 
             {/* Player */}
-            <div className={`card-wuxia rounded-sm p-4 transition-all ${shakePlayer ? "-translate-x-2" : ""}`} style={{ transitionDuration: "0.1s" }}>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-2xl">🗡️</span>
+            <div className={`card-wuxia rounded-sm p-4 transition-all overflow-hidden relative ${shakePlayer ? "-translate-x-2" : ""}`} style={{ transitionDuration: "0.1s" }}>
+              <div className="absolute inset-0 pointer-events-none">
+                <img src={HERO_IMG} alt="" className="w-full h-full object-cover object-top opacity-10" style={{ filter: "saturate(0.3)" }} />
+                <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(10,10,10,0.7), rgba(10,10,10,0.9))" }} />
+              </div>
+              <div className="relative flex items-center gap-2 mb-2">
+                <div className="w-10 h-10 rounded-sm overflow-hidden flex-shrink-0" style={{ border: "1px solid rgba(201,168,76,0.4)" }}>
+                  <img src={HERO_IMG} alt="" className="w-full h-full object-cover object-top" style={{ filter: "brightness(0.8) saturate(0.7)" }} />
+                </div>
                 <div>
                   <div className="font-cinzel text-xs text-gold tracking-wide">Wei Jian</div>
                   <div className="font-cinzel text-xs" style={{ color: "rgba(232,220,200,0.3)" }}>Fallen General</div>
